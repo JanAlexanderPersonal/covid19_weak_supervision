@@ -29,7 +29,7 @@ Experiment hyperparameters are defined in `./exp_configs/weakly_exps.py`
 Run the following command to reproduce the experiments in the paper:
 
 ```
-python trainval.py -e weakly_covid19_${DATASET}_${SPLIT} -sb ${SAVEDIR_BASE} -d ${DATADIR} -r 1
+python trainval.py -e weakly_covid19_${DATASET}_${SPLIT}_c2 -sb ${SAVEDIR_BASE} -d ${DATADIR} -r 1
 ```
 
 The variables (`${...}`) can be substituted with the following values:

@@ -197,6 +197,8 @@ if __name__ == "__main__":
     else:
         # select exp group
         exp_list = []
+        for key in exp_configs.EXP_GROUPS.keys():
+            print(f'key : {key}')
         for exp_group_name in args.exp_group_list:
             exp_list += exp_configs.EXP_GROUPS[exp_group_name]
 
