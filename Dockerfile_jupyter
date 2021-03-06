@@ -9,11 +9,11 @@ ENV TORCH_HOME /home/jovyan/work
 WORKDIR /home/jovyan/
 
 RUN pip install torch==1.4.0
-RUN pip install torchvision==0.5.0
+RUN pip install torchvision>=0.5.0
 RUN pip install pydicom==1.4.2
 RUN pip install pylidc==0.2.1
 RUN pip install SimpleITK==1.2.4
-RUN pip install torchnet==0.0.4
+RUN pip install torchnet
 RUN pip install h5py==2.10.0
 RUN pip install tensorboard==1.14.0
 RUN pip install ninja==1.9.0.post1
