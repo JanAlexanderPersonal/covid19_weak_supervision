@@ -55,6 +55,7 @@ class SemSeg(torch.nn.Module):
 
     def train_on_loader(self, train_loader):
         
+        # set model in train mode (not eval mode)
         self.train()
         self.epoch += 1
         n_batches = len(train_loader)

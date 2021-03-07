@@ -48,6 +48,7 @@ class Covid19V2(torch.utils.data.Dataset):
         scan_list = list(scan_list)
         scan_list.sort()
 
+        # make difference between sep and mixed approach
         if seperate:
             if split == 'train':
                 scan_list = scan_list[:5]

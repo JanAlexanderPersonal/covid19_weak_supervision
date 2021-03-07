@@ -42,6 +42,8 @@ def trainval(exp_dict, savedir_base, datadir, reset=False, num_workers=0):
     hu.save_json(os.path.join(savedir, "exp_dict.json"), exp_dict)
     print("Experiment saved in %s" % savedir)
 
+    input('enter to continue')
+
     # set seed
     # ==================
     seed = 42
@@ -52,6 +54,7 @@ def trainval(exp_dict, savedir_base, datadir, reset=False, num_workers=0):
     # Dataset
     # ==================
     # train set
+
     train_set = datasets.get_dataset(dataset_dict=exp_dict["dataset"],
                                      split="train",
                                      datadir=datadir,
@@ -85,6 +88,7 @@ def trainval(exp_dict, savedir_base, datadir, reset=False, num_workers=0):
 
     # Model
     # ==================
+    print('get model')
     model = models.get_model(model_dict=exp_dict['model'],
                              exp_dict=exp_dict,
                              train_set=train_set).cuda()
@@ -92,6 +96,9 @@ def trainval(exp_dict, savedir_base, datadir, reset=False, num_workers=0):
     # model.opt = optimizers.get_optim(exp_dict['opt'], model)
     model_path = os.path.join(savedir, "model.pth")
     score_list_path = os.path.join(savedir, "score_list.pkl")
+
+    print(model)
+    input('press enter to continue')
 
     if os.path.exists(score_list_path):
         # resume experiment
@@ -194,11 +201,12 @@ if __name__ == "__main__":
 
         exp_list = [exp_dict]
 
+    for key, val in exp_configs.EXP_GROUPS.items():
+        print(f'\n\n{key} : \n{val}')
+
     else:
         # select exp group
         exp_list = []
-        for key in exp_configs.EXP_GROUPS.keys():
-            print(f'key : {key}')
         for exp_group_name in args.exp_group_list:
             exp_list += exp_configs.EXP_GROUPS[exp_group_name]
 
