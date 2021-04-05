@@ -38,7 +38,7 @@ def setupLogging():
     
     # Create the Logger
     root_logger = logging.getLogger()
-    root_logger.setLevel(logging.INFO)
+    root_logger.setLevel(logging.DEBUG)
 
     handler = logging.StreamHandler()
     logger_formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
@@ -115,7 +115,6 @@ def trainval(exp_dict, savedir_base, datadir, reset=False, num_workers=0):
     score_list_path = os.path.join(savedir, "score_list.pkl")
 
     print(model)
-    input('press enter to continue')
 
     if os.path.exists(score_list_path):
         # resume experiment
@@ -219,9 +218,6 @@ if __name__ == "__main__":
         exp_dict = hu.load_json(os.path.join(savedir, "exp_dict.json"))
 
         exp_list = [exp_dict]
-
-    for key, val in exp_configs.EXP_GROUPS.items():
-        print(f'\n\n{key} : \n{val}')
 
     else:
         # select exp group

@@ -209,10 +209,11 @@ def get_random_points(mask, n_points=1, seed=1):
 def get_points_from_mask(mask, bg_points=0):
     n_points = 0
     points = np.zeros(mask.shape)
-    # print(np.unique(mask))
+    logger.debug(f'start extraction of points from mask {type(mask)}. Unique values in mask: {np.unique(mask)}')
     assert(len(np.setdiff1d(np.unique(mask),[0,1,2] ))==0)
 
     for c in np.unique(mask):
+        logger.debug(f'Mask value : {c}')
         if c == 0:
             continue
         blobs =  morph.label((mask==c).squeeze())
@@ -235,6 +236,8 @@ def get_points_from_mask(mask, bg_points=0):
                 x_tmp = x_list[y_list == yi]
                 xi = np.random.choice(x_tmp)
                 points[yi, xi] = 0
+
+    logger.debug(f'Point extraction done. Result : {np.unique(points, return_counts = True)}')
 
     return points
         
