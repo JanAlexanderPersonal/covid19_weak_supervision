@@ -5,6 +5,8 @@ import numpy as np
 import torch
 from . import struct_metric
 
+import logging
+logger = logging.getLogger(__name__)
 
 class SegMeter:
     def __init__(self, split):
@@ -26,6 +28,7 @@ class SegMeter:
             labels = np.arange(model.n_classes)
             cf = confusion_multi_class(torch.as_tensor(pred_mask).float().cuda(), masks.cuda().float(),
                                     labels=labels)
+            logger.debug(f'Partial confusion matrix {cf}')
 
         if self.cf is None:
             self.cf = cf

@@ -5,6 +5,9 @@ from skimage import morphology as morph
 import numpy as np
 import torch.utils.model_zoo as model_zoo
 
+import logging
+logger = logging.getLogger(__name__)
+
 #----------- LC-FCN8
 class FCN8VGG16(nn.Module):
     def __init__(self, n_classes):
@@ -131,6 +134,8 @@ class FCN8VGG16(nn.Module):
                                          9:9+upscore_pool4.size(3)]
 
         output = self.upscore8(score_pool3c + upscore_pool4) 
+
+        logger.debug(f'VGG16 - output shape {output[:, :, 31: (31 + h), 31: (31 + w)].contiguous().size()}')
 
         return output[:, :, 31: (31 + h), 31: (31 + w)].contiguous()
 

@@ -9,6 +9,9 @@ from . import transformers
 from PIL import Image
 import PIL
 
+import logging
+logger = logging.getLogger(__name__)
+
 class Covid19V2(torch.utils.data.Dataset):
     def __init__(
         self,
@@ -148,6 +151,12 @@ class Covid19V2(torch.utils.data.Dataset):
 
         from src.modules.lcfcn import lcfcn_loss
         points =  lcfcn_loss.get_points_from_mask(mask.numpy().squeeze(), bg_points=-1)
+
+        logger.debug(f'shapes:')
+        logger.debug(f'image : {image.shape} - type {type(image)} with value interval [{image.min()} to {image.max()}]')
+        logger.debug(f'mask : {mask.long()[None].shape}')
+        logger.debug(f'points : {torch.LongTensor(points).shape}')
+
         # if (points == 255).mean() == 1:
         #     points[:] = 0
         return {'images': image, 

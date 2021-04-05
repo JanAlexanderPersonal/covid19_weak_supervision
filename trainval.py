@@ -17,6 +17,8 @@ from src import models
 from src import datasets
 from src import utils as ut
 
+from pprint import pformat
+
 
 import argparse
 
@@ -27,6 +29,21 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
 cudnn.benchmark = True
+
+import logging
+
+def setupLogging():
+    """Setup the logger for this module
+    """
+    
+    # Create the Logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+
+    handler = logging.StreamHandler()
+    logger_formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(logger_formatter)
+    root_logger.addHandler(handler)
 
 
 def trainval(exp_dict, savedir_base, datadir, reset=False, num_workers=0):
@@ -42,7 +59,7 @@ def trainval(exp_dict, savedir_base, datadir, reset=False, num_workers=0):
     hu.save_json(os.path.join(savedir, "exp_dict.json"), exp_dict)
     print("Experiment saved in %s" % savedir)
 
-    input('enter to continue')
+    logger.info(f'start trainval with experiment dict {pformat(exp_dict)}')
 
     # set seed
     # ==================
@@ -180,7 +197,9 @@ def trainval(exp_dict, savedir_base, datadir, reset=False, num_workers=0):
 
 
 if __name__ == "__main__":
+    setupLogging()
     parser = argparse.ArgumentParser()
+    logger = logging.getLogger(__name__)
 
     parser.add_argument('-e', '--exp_group_list', nargs="+")
     parser.add_argument('-sb', '--savedir_base', required=True)
