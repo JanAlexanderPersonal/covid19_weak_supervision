@@ -158,6 +158,7 @@ def blobs2points(blobs):
         y, x = r.centroid
 
         points[int(y), int(x)] = 1
+        logger.debug(f'Centerpoint of blob : {[int(y), int(x)]}')
 
     return points
 

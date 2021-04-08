@@ -20,6 +20,9 @@ from kornia.geometry.transform import flips
 from . import optimizers, metrics, networks
 from src.modules import sstransforms as sst
 
+import logging
+logger = logging.getLogger(__name__)
+
 class SemSeg(torch.nn.Module):
     def __init__(self, exp_dict):
         super().__init__()
@@ -95,6 +98,9 @@ class SemSeg(torch.nn.Module):
         if loss_name == 'rot_point_loss':
             """ Flips the image and computes a random rotation of 
                 {0, 90, 180, 270} degrees"""
+
+            logger.debug('Start calculation rotational point loss')
+
             points = points[:,None]
             rotations = np.random.choice([0, 90, 180, 270], points.shape[0], replace=True)
             images = flips.Hflip()(images)
@@ -102,6 +108,9 @@ class SemSeg(torch.nn.Module):
             logits_rotated = self.model_base(images_rotated)
             logits_recovered = sst.batch_rotation(logits_rotated, 360 - rotations)
             logits_recovered = flips.Hflip()(logits_recovered)
+
+            logger.debug('shape batch rotated images (BCHW): {}'.format(images_rotated.shape))
+            logger.debug(f'shape logits recovered (BCHW): {logits_recovered.shape}')
             
             loss = torch.mean(torch.abs(logits_recovered-logits))
             
@@ -121,9 +130,15 @@ class SemSeg(torch.nn.Module):
         elif loss_name == 'cons_point_loss':
             """ CB point loss, see Laradji et al. 2020 """
             points = points[:,None]
+
+            logger.debug(f'Calculate consistency point loss')
             
             logits_flip = self.model_base(flips.Hflip()(images))
             loss = torch.mean(torch.abs(flips.Hflip()(logits_flip)-logits))
+
+            logger.debug(f'logits shape : {logits.size()}')
+            logger.debug(f'logits device : {logits.device}')
+            logger.debug(f'select chan 0 : {logits.index_select(1, torch.tensor([0]).to(logits.device)).size()}')
             
             ind = points!=255
             if ind.sum() != 0:

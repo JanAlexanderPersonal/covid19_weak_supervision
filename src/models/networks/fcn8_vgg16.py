@@ -135,6 +135,7 @@ class FCN8VGG16(nn.Module):
 
         output = self.upscore8(score_pool3c + upscore_pool4) 
 
+        logger.debug(f'VGG16 - raw output shape {output.size()}')
         logger.debug(f'VGG16 - output shape {output[:, :, 31: (31 + h), 31: (31 + w)].contiguous().size()}')
 
         return output[:, :, 31: (31 + h), 31: (31 + w)].contiguous()
