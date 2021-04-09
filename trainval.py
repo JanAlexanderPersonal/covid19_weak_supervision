@@ -61,6 +61,8 @@ def trainval(exp_dict, savedir_base, datadir, reset=False, num_workers=0):
 
     logger.info(f'start trainval with experiment dict {pformat(exp_dict)}')
 
+    input('press enter')
+
     # set seed
     # ==================
     seed = 42

@@ -135,6 +135,8 @@ class SemSeg(torch.nn.Module):
             
             logits_flip = self.model_base(flips.Hflip()(images))
             loss = torch.mean(torch.abs(flips.Hflip()(logits_flip)-logits))
+            logger.debug(f'flip loss : {loss}')
+
 
             logger.debug(f'logits shape : {logits.size()}')
             logger.debug(f'logits device : {logits.device}')
@@ -145,12 +147,14 @@ class SemSeg(torch.nn.Module):
                 loss += F.binary_cross_entropy_with_logits(logits[ind], 
                                         points[ind].float().cuda(), 
                                         reduction='mean')
+                logger.debug(f'straight logits loss added : {loss}')
 
                 points_flip = flips.Hflip()(points)
                 ind = points_flip!=255
                 loss += F.binary_cross_entropy_with_logits(logits_flip[ind], 
                                         points_flip[ind].float().cuda(), 
                                         reduction='mean')
+                logger.debug(f'flipped logits loss added : {loss}')
 
         elif loss_name == "elastic_cons_point_loss":
             """ Performs an elastic transformation to the images and logits and 
@@ -241,7 +245,7 @@ class SemSeg(torch.nn.Module):
                                         points_flip[ind].float().cuda(), 
                                         reduction='mean')
 
-
+        logger.debug(f'Return at the end of the point loss function {loss}')
         return loss 
 
     def train_on_batch(self, batch):

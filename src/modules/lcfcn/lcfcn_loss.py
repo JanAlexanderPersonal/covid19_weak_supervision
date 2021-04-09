@@ -10,6 +10,9 @@ from skimage.morphology import watershed
 from skimage.segmentation import find_boundaries
 
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def compute_loss(points, probs, roi_mask=None):
     """
@@ -227,6 +230,8 @@ def get_points_from_mask(mask, bg_points=0):
     points[points==0] = 255
     if bg_points == -1:
        bg_points = n_points
+
+    logger.debug(f'Points extracted, without background. Result : {np.unique(points, return_counts = True)}')
 
     if bg_points:
         from haven import haven_utils as hu
